@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "start": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules --no-notify src/server.ts",
-    "test:functional": "jest --projects ./test --forceExit --runInBand",
+    "test:functional": "jest --projects ./test --forceExit --runInBand --detectOpenHandles",
     "test:unit": "jest"
   },
   "devDependencies": {
