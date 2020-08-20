@@ -29,13 +29,19 @@ export class SetupServer extends Server {
     await database.connect();
   }
 
-  public async close(): Promise<void> {
-    await database.close();
-  }
-
   private setupControllers(): void {
     const forecastController = new ForecastController();
     const beachesController = new BeachesController();
     this.addControllers([forecastController, beachesController]);
+  }
+
+  public start(): void {
+    this.app.listen(this.port, () => {
+      console.info(`Server listening of port ${this.port}`);
+    });
+  }
+
+  public async close(): Promise<void> {
+    await database.close();
   }
 }
