@@ -1,6 +1,10 @@
 {
   "App": {
     "port": 3333,
+    "auth": {
+      "key": "some-key",
+      "tokenExpiresIn": 20000
+    },
     "database": {
       "mongoUrl": "mongodb://localhost:27017/surf-forecast"
     },
