@@ -24,7 +24,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 class SetupServer extends _core.Server {
-  constructor(port = 3333) {
+  constructor(port = 3000) {
     super();
     this.port = port;
   }
@@ -55,7 +55,7 @@ class SetupServer extends _core.Server {
   }
 
   start() {
-    this.app.listen(this.port, () => {
+    this.app.listen(process.env.PORT || this.port, () => {
       console.info(`Server listening of port ${this.port}`);
     });
   }
