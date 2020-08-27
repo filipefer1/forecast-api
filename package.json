@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
+    "production": "set NODE_ENV=production&& node dist/app.js",
     "deploy": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
     "start": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules --no-notify src/app.ts",
     "test:functional": "jest --projects ./test --forceExit --runInBand ",
