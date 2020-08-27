@@ -8,7 +8,7 @@
     "build": "tsc",
     "production": "set NODE_ENV=production&& node dist/app.js",
     "deploy": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
-    "start": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules --no-notify src/app.ts",
+    "start": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules --no-notify src/app.ts | pino-pretty -c",
     "test:functional": "jest --projects ./test --forceExit --runInBand ",
     "test:unit": "jest",
     "test": "yarn test:unit && yarn test:functional"
@@ -31,6 +31,7 @@
     "@types/mongoose": "^5.7.36",
     "@types/nock": "^11.1.0",
     "@types/node": "^14.0.27",
+    "@types/pino": "^6.3.0",
     "@types/supertest": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^3.9.0",
     "babel-plugin-module-resolver": "^4.0.0",
@@ -38,6 +39,7 @@
     "eslint-config-airbnb-base": "^14.2.0",
     "jest": "^26.3.0",
     "nock": "^13.0.4",
+    "pino-pretty": "^4.1.0",
     "supertest": "^4.0.2",
     "ts-jest": "^26.2.0",
     "ts-node-dev": "^1.0.0-pre.56",
@@ -53,6 +55,7 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "module-alias": "^2.2.2",
-    "mongoose": "^5.10.0"
+    "mongoose": "^5.10.0",
+    "pino": "^6.5.1"
   }
 }
