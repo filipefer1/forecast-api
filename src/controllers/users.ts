@@ -24,9 +24,9 @@ export class UsersController extends BaseController {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(401).send({
+      return this.sendErrorResponse(res, {
         code: 401,
-        error: "User not found",
+        message: "User not found",
       });
     }
 
@@ -35,9 +35,9 @@ export class UsersController extends BaseController {
       user.password
     );
     if (!isPasswordsEqual) {
-      return res.status(401).send({
+      return this.sendErrorResponse(res, {
         code: 401,
-        error: "Password does not match!",
+        message: "Password does not match!",
       });
     }
 

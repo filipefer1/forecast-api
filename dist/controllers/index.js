@@ -9,21 +9,27 @@ var _mongoose = _interopRequireDefault(require("mongoose"));
 
 var _user = require("../models/user");
 
+var _logger = _interopRequireDefault(require("../logger"));
+
+var _apiError = _interopRequireDefault(require("../util/errors/api-error"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 class BaseController {
   sendCreateUpdateErrorResponse(res, error) {
     if (error instanceof _mongoose.default.Error.ValidationError) {
       const clientErrors = this.handleClientErrors(error);
-      res.status(clientErrors.code).send({
+      res.status(clientErrors.code).send(_apiError.default.format({
         code: clientErrors.code,
-        error: clientErrors.error
-      });
+        message: clientErrors.error
+      }));
     } else {
-      res.status(500).send({
+      _logger.default.error(error);
+
+      res.status(500).send(_apiError.default.format({
         code: 500,
-        error: "Something went wrong"
-      });
+        message: "Something went wrong"
+      }));
     }
   }
 
@@ -41,6 +47,10 @@ class BaseController {
       code: 422,
       error: error.message
     };
+  }
+
+  sendErrorResponse(res, apiError) {
+    return res.status(apiError.code).send(_apiError.default.format(apiError));
   }
 
 }

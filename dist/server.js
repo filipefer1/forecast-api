@@ -9,6 +9,10 @@ var _core = require("@overnightjs/core");
 
 var _bodyParser = _interopRequireDefault(require("body-parser"));
 
+var _expressPinoLogger = _interopRequireDefault(require("express-pino-logger"));
+
+var _cors = _interopRequireDefault(require("cors"));
+
 var _forecast = require("./controllers/forecast");
 
 var database = _interopRequireWildcard(require("./database"));
@@ -16,6 +20,8 @@ var database = _interopRequireWildcard(require("./database"));
 var _beaches = require("./controllers/beaches");
 
 var _users = require("./controllers/users");
+
+var _logger = _interopRequireDefault(require("./logger"));
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
 
@@ -41,6 +47,12 @@ class SetupServer extends _core.Server {
 
   setupExpress() {
     this.app.use(_bodyParser.default.json());
+    this.app.use((0, _expressPinoLogger.default)({
+      logger: _logger.default
+    }));
+    this.app.use((0, _cors.default)({
+      origin: "*"
+    }));
   }
 
   async setupDatabase() {
@@ -56,7 +68,7 @@ class SetupServer extends _core.Server {
 
   start() {
     this.app.listen(process.env.PORT || this.port, () => {
-      console.info(`Server listening of port ${this.port}`);
+      _logger.default.info(`Server listening of port ${this.port}`);
     });
   }
 

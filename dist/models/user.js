@@ -9,6 +9,8 @@ var _mongoose = _interopRequireDefault(require("mongoose"));
 
 var _auth = _interopRequireDefault(require("../services/auth"));
 
+var _logger = _interopRequireDefault(require("../logger"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 let CUSTOM_VALIDATION;
@@ -56,7 +58,7 @@ schema.pre("save", async function () {
     const hashedPassword = await _auth.default.hashPassword(this.password);
     this.password = hashedPassword;
   } catch (error) {
-    console.error(`Error hashing the password  for the user ${this.name}`);
+    _logger.default.error(`Error hashing the password  for the user ${this.name}`);
   }
 });
 

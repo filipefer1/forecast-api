@@ -40,18 +40,18 @@ let UsersController = (_dec = (0, _core.Controller)("users"), _dec2 = (0, _core.
     });
 
     if (!user) {
-      return res.status(401).send({
+      return this.sendErrorResponse(res, {
         code: 401,
-        error: "User not found"
+        message: "User not found"
       });
     }
 
     const isPasswordsEqual = await _auth.default.comparePasswords(password, user.password);
 
     if (!isPasswordsEqual) {
-      return res.status(401).send({
+      return this.sendErrorResponse(res, {
         code: 401,
-        error: "Password does not match!"
+        message: "Password does not match!"
       });
     }
 

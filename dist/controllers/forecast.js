@@ -13,12 +13,18 @@ var _beach = require("../models/beach");
 
 var _auth = require("../middlewares/auth");
 
+var _logger = _interopRequireDefault(require("../logger"));
+
+var _ = require(".");
+
 var _dec, _dec2, _dec3, _class, _class2;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
 
 const forecast = new _forecast.Forecast();
-let ForecastController = (_dec = (0, _core.Controller)("forecast"), _dec2 = (0, _core.ClassMiddleware)(_auth.authMiddleware), _dec3 = (0, _core.Get)(""), _dec(_class = _dec2(_class = (_class2 = class ForecastController {
+let ForecastController = (_dec = (0, _core.Controller)("forecast"), _dec2 = (0, _core.ClassMiddleware)(_auth.authMiddleware), _dec3 = (0, _core.Get)(""), _dec(_class = _dec2(_class = (_class2 = class ForecastController extends _.BaseController {
   async getForecastForLoggedUser(req, res) {
     try {
       var _req$decoded;
@@ -29,8 +35,11 @@ let ForecastController = (_dec = (0, _core.Controller)("forecast"), _dec2 = (0, 
       const forecastData = await forecast.processForecastForBeaches(beaches);
       res.status(200).send(forecastData);
     } catch (err) {
-      res.status(500).send({
-        error: "Something went wrong"
+      _logger.default.error(err);
+
+      this.sendErrorResponse(res, {
+        code: 500,
+        message: "Something went wrong"
       });
     }
   }

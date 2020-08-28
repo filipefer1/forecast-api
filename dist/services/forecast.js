@@ -9,6 +9,10 @@ var _stormGlass = require("../clients/stormGlass");
 
 var _internalError = require("../util/errors/internalError");
 
+var _logger = _interopRequireDefault(require("../logger"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 class ForecastProcessingInternalError extends _internalError.InternalError {
   constructor(message) {
     super(`Unexpected error during the forecast processing: ${message}`);
@@ -26,6 +30,8 @@ class Forecast {
   async processForecastForBeaches(beaches) {
     const pointsWithCorrectSources = [];
 
+    _logger.default.info(`Preparing the forecast for ${beaches.length} beaches`);
+
     try {
       for (const beach of beaches) {
         const points = await this.stormGlass.fetchPoints(beach.lat, beach.lng);
@@ -35,6 +41,8 @@ class Forecast {
 
       return this.mapForecastByTime(pointsWithCorrectSources);
     } catch (error) {
+      _logger.default.error(error);
+
       throw new ForecastProcessingInternalError(error.message);
     }
   }
