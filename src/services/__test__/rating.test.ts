@@ -1,4 +1,4 @@
-import { Beach, BeachPosition } from "@src/models/beach";
+import { Beach, GeoPosition } from "@src/models/beach";
 import { Rating } from "../rating";
 
 describe("Rating service", () => {
@@ -6,7 +6,7 @@ describe("Rating service", () => {
     lat: -33.792726,
     lng: 151.289824,
     name: "Manly",
-    position: BeachPosition.E,
+    position: GeoPosition.E,
     user: "some-user",
   };
 
@@ -106,24 +106,24 @@ describe("Rating service", () => {
   describe("Get rating based on wind and wave positions", () => {
     it("should get rating 1 for a beach with onshore winds", () => {
       const rating = defaultRating.getRatingBasedOnWindAndWavePositions(
-        BeachPosition.E,
-        BeachPosition.E
+        GeoPosition.E,
+        GeoPosition.E
       );
 
       expect(rating).toBe(1);
     });
     it("should get rating 3 for a beach with cross winds", () => {
       const rating = defaultRating.getRatingBasedOnWindAndWavePositions(
-        BeachPosition.E,
-        BeachPosition.S
+        GeoPosition.E,
+        GeoPosition.S
       );
 
       expect(rating).toBe(3);
     });
     it("should get rating 5 for a beach with offshore winds", () => {
       const rating = defaultRating.getRatingBasedOnWindAndWavePositions(
-        BeachPosition.E,
-        BeachPosition.W
+        GeoPosition.E,
+        GeoPosition.W
       );
 
       expect(rating).toBe(5);
@@ -171,23 +171,23 @@ describe("Rating service", () => {
   describe("Get position based on points location", () => {
     it("should get the position based on a east location", () => {
       const response = defaultRating.getPostionFromLocation(92);
-      expect(response).toBe(BeachPosition.E);
+      expect(response).toBe(GeoPosition.E);
     });
     it("should get the position based on a north location 1", () => {
       const response = defaultRating.getPostionFromLocation(360);
-      expect(response).toBe(BeachPosition.N);
+      expect(response).toBe(GeoPosition.N);
     });
     it("should get the position based on a north location 2", () => {
       const response = defaultRating.getPostionFromLocation(40);
-      expect(response).toBe(BeachPosition.N);
+      expect(response).toBe(GeoPosition.N);
     });
     it("should get the position based on a south location", () => {
       const response = defaultRating.getPostionFromLocation(200);
-      expect(response).toBe(BeachPosition.S);
+      expect(response).toBe(GeoPosition.S);
     });
     it("should get the position based on a west location 2", () => {
       const response = defaultRating.getPostionFromLocation(300);
-      expect(response).toBe(BeachPosition.W);
+      expect(response).toBe(GeoPosition.W);
     });
   });
 });
