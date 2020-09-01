@@ -30,6 +30,7 @@
     "@types/http-status-codes": "^1.2.0",
     "@types/jest": "^26.0.9",
     "@types/jsonwebtoken": "^8.5.0",
+    "@types/lodash": "^4.14.161",
     "@types/module-alias": "^2.0.0",
     "@types/mongoose": "^5.7.36",
     "@types/nock": "^11.1.0",
