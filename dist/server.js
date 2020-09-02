@@ -13,6 +13,12 @@ var _expressPinoLogger = _interopRequireDefault(require("express-pino-logger"));
 
 var _cors = _interopRequireDefault(require("cors"));
 
+var _swaggerUiExpress = _interopRequireDefault(require("swagger-ui-express"));
+
+var _expressOpenapiValidator = require("express-openapi-validator");
+
+var _apiSchema = _interopRequireDefault(require("./api.schema.json"));
+
 var _forecast = require("./controllers/forecast");
 
 var database = _interopRequireWildcard(require("./database"));
@@ -22,6 +28,8 @@ var _beaches = require("./controllers/beaches");
 var _users = require("./controllers/users");
 
 var _logger = _interopRequireDefault(require("./logger"));
+
+var _apiErrorValidator = require("./middlewares/api-error-validator");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
 
@@ -37,8 +45,10 @@ class SetupServer extends _core.Server {
 
   async init() {
     this.setupExpress();
+    await this.docsSetup();
     this.setupControllers();
     await this.setupDatabase();
+    this.setupErrorHandlers();
   }
 
   getApp() {
@@ -64,6 +74,19 @@ class SetupServer extends _core.Server {
     const beachesController = new _beaches.BeachesController();
     const usersController = new _users.UsersController();
     this.addControllers([forecastController, beachesController, usersController]);
+  }
+
+  setupErrorHandlers() {
+    this.app.use(_apiErrorValidator.apiErrorValidator);
+  }
+
+  async docsSetup() {
+    this.app.use("/docs", _swaggerUiExpress.default.serve, _swaggerUiExpress.default.setup(_apiSchema.default));
+    await new _expressOpenapiValidator.OpenApiValidator({
+      apiSpec: _apiSchema.default,
+      validateRequests: true,
+      validateResponses: true
+    }).install(this.app);
   }
 
   start() {

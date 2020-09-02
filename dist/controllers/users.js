@@ -13,13 +13,15 @@ var _ = require(".");
 
 var _auth = _interopRequireDefault(require("../services/auth"));
 
-var _dec, _dec2, _dec3, _class, _class2;
+var _auth2 = require("../middlewares/auth");
+
+var _dec, _dec2, _dec3, _dec4, _dec5, _class, _class2;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
 
-let UsersController = (_dec = (0, _core.Controller)("users"), _dec2 = (0, _core.Post)(""), _dec3 = (0, _core.Post)("authenticate"), _dec(_class = (_class2 = class UsersController extends _.BaseController {
+let UsersController = (_dec = (0, _core.Controller)("users"), _dec2 = (0, _core.Post)(""), _dec3 = (0, _core.Post)("authenticate"), _dec4 = (0, _core.Get)("me"), _dec5 = (0, _core.Middleware)(_auth2.authMiddleware), _dec(_class = (_class2 = class UsersController extends _.BaseController {
   async create(req, res) {
     try {
       const user = new _user.User(req.body);
@@ -64,5 +66,23 @@ let UsersController = (_dec = (0, _core.Controller)("users"), _dec2 = (0, _core.
     });
   }
 
-}, (_applyDecoratedDescriptor(_class2.prototype, "create", [_dec2], Object.getOwnPropertyDescriptor(_class2.prototype, "create"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "authenticate", [_dec3], Object.getOwnPropertyDescriptor(_class2.prototype, "authenticate"), _class2.prototype)), _class2)) || _class);
+  async me(req, res) {
+    const email = req.decoded ? req.decoded.email : undefined;
+    const user = await _user.User.findOne({
+      email
+    });
+
+    if (!user) {
+      return this.sendErrorResponse(res, {
+        code: 404,
+        message: "User not found!"
+      });
+    }
+
+    return res.send({
+      user
+    });
+  }
+
+}, (_applyDecoratedDescriptor(_class2.prototype, "create", [_dec2], Object.getOwnPropertyDescriptor(_class2.prototype, "create"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "authenticate", [_dec3], Object.getOwnPropertyDescriptor(_class2.prototype, "authenticate"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "me", [_dec4, _dec5], Object.getOwnPropertyDescriptor(_class2.prototype, "me"), _class2.prototype)), _class2)) || _class);
 exports.UsersController = UsersController;
